@@ -38,7 +38,7 @@ function sendgrid_mail($from, $to, $subject, $message, $headers) {
 		} else {
 			throw new Exception("Unknown Content-Type suffix: $suffix");
 		}
-		$contentType = substr($contentType, 0, $i-1);
+		$contentType = substr($contentType, 0, $i);
 	}
 	
 	// manipulate FROM address array into SendGrid address array format
