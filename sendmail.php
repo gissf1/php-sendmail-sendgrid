@@ -8,9 +8,24 @@
 * Homepage: https://github.com/gissf1/php-sendmail-sendgrid
 * Coded by Brian Gisseler (gissf1@gmail.com)
 * License: MIT
+*
+* This code tries to maintain compatibility with PHP 5.4 through 8.3;
+* Therefore it avoids features introduced or deprecated in PHP 5.5+
 **/
 
 global $apikey;
+
+////////////////////////////////////////////
+// polyfill missing functions for older PHP
+//
+if (!function_exists('str_starts_with')) {
+	function str_starts_with($haystack, $needle) {
+		return strpos($haystack, $needle) === 0;
+	}
+}
+//
+// END polyfill functions
+////////////////////////////////////////////
 
 function sendgrid_mail($from, $to, $subject, $message, $headers) {
 	global $apikey;
@@ -164,7 +179,7 @@ function splitNameFromEmail($email) {
 function is_valid_email($email) {
 	try {
 		list($email2, $name) = splitNameFromEmail($email);
-	} catch (Exception) {
+	} catch (Exception $e) {
 		return false;
 	}
 	return true;
