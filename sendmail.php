@@ -219,10 +219,12 @@ EOF;
 	exit(1);
 }
 
-// setup variables
-$verbose = 0;
+// pull in apikey from configuration if global is unset
 if (empty($apikey)) $apikey = get_cfg_var('sendgrid_apikey');
 if (empty($apikey)) $apikey = ini_get('sendgrid_apikey');
+
+// setup variables
+$verbose = 0;
 $to = array();
 $from = NULL;
 $subject = NULL;
