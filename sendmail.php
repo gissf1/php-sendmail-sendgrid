@@ -79,6 +79,28 @@ function sendgrid_mail($from, $to, $subject, $message, $headers) {
 	// build curl request
 	$curl = curl_init();
 	if ($curl === false) throw new Exception("curl_init() failed.");
+	$jsonData = json_encode(array(
+		"personalizations" => array(
+			array("to" => $to)
+		),
+		"from" => $from,
+		"headers" => (object) $headers,
+		"subject" => $subject,
+		"content" => array(
+			array(
+				"type" => $contentType,
+				"value" => $message,
+			)
+		),
+		/*
+		"mail_settings" => array(
+			"sandbox_mode" => array(
+				"enable" => true,
+			),
+		),
+		*/
+	));
+	if ($jsonData === false) throw new Exception("json_encode() failed.");
 	$ok = curl_setopt_array($curl, array(
 // 		CURLOPT_VERBOSE => true,
 // 		CURLOPT_FAILONERROR => true,
@@ -93,27 +115,7 @@ function sendgrid_mail($from, $to, $subject, $message, $headers) {
 			'Content-Type: application/json',
 		),
 		CURLOPT_POST => true,
-		CURLOPT_POSTFIELDS => json_encode(array(
-			"personalizations" => array(
-				array("to" => $to)
-			),
-			"from" => $from,
-			"headers" => (object) $headers,
-			"subject" => $subject,
-			"content" => array(
-				array(
-					"type" => $contentType,
-					"value" => $message,
-				)
-			),
-			/*
-			"mail_settings" => array(
-				"sandbox_mode" => array(
-					"enable" => true,
-				),
-			),
-			*/
-		)),
+		CURLOPT_POSTFIELDS => $jsonData,
 	));
 	if (!$ok) throw new Exception("curl_setopt_array() failed to set parameters");
 	$ret = curl_exec($curl);
