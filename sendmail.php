@@ -72,7 +72,7 @@ function sendgrid_mail($from, $to, $subject, $message, $headers) {
 		if (!empty($name)) {
 			$email["name"] = $name;
 		}
-		array_push($to, $email);
+		array_push($to, (object) $email);
 	}
 	unset($a);
 	
@@ -81,13 +81,13 @@ function sendgrid_mail($from, $to, $subject, $message, $headers) {
 	if ($curl === false) throw new Exception("curl_init() failed.");
 	$jsonData = json_encode(array(
 		"personalizations" => array(
-			array("to" => $to)
+			(object) array("to" => $to)
 		),
 		"from" => $from,
 		"headers" => (object) $headers,
 		"subject" => $subject,
 		"content" => array(
-			array(
+			(object) array(
 				"type" => $contentType,
 				"value" => $message,
 			)
