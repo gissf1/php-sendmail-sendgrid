@@ -98,7 +98,7 @@ function sendgrid_mail($from, $to, $subject, $message, $headers) {
 				array("to" => $to)
 			),
 			"from" => $from,
-			"headers" => $headers,
+			"headers" => (object) $headers,
 			"subject" => $subject,
 			"content" => array(
 				array(
